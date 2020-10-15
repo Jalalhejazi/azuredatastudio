@@ -98,10 +98,12 @@ export class ClusterController implements IClusterController {
 		private _username?: string,
 		private _password?: string
 	) {
+		console.log(`Cluster controller being created with url : ${url}, authType: ${_authType}, username: ${_username}`);
 		if (!url || (_authType === 'basic' && (!_username || !_password))) {
 			throw new Error('Missing required inputs for Cluster controller API (URL, username, password)');
 		}
 		this._url = adjustUrl(url);
+		console.log(`Adjusted URL : ${this._url}`);
 		if (this._authType === 'basic') {
 			this._authPromise = Promise.resolve(new BasicAuth(_username, _password));
 		} else {
@@ -192,6 +194,7 @@ export class ClusterController implements IClusterController {
 
 	private async getClusterConfigImpl(self: ClusterController): Promise<any> {
 		let auth = await self._authPromise;
+		console.log(`URL in getClusterConfigImpl ${self._url}`);
 		let endPointApi = new BdcApiWrapper(self._username, self._password, self._url, auth);
 		let options: any = {};
 
